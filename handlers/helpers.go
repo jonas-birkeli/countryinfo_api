@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -59,7 +60,13 @@ func getAPIStatus(apiURL string) (int, error) {
 		return 0, fmt.Errorf("Failed to get API status: %v", err)
 	}
 
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			// Auto generated stub, no idea sorry😊
+			return
+		}
+	}(resp.Body)
 
 	return resp.StatusCode, nil
 }
