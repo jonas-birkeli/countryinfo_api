@@ -2,11 +2,14 @@ package config
 
 const PORT = "8080"
 
-const BASE_URL = "/countryinfo"
-const VERSION = "/v1"
+const BASE_URL = "/countryinfo" + TRAILING_SLASH
+const VERSION = "v1"
 
 const TRAILING_SLASH = "/"
 
 const INFO_ENDPOINT = BASE_URL + VERSION + "/info" + TRAILING_SLASH
 const POPULATION_ENDPOINT = BASE_URL + VERSION + "/population" + TRAILING_SLASH
 const STATUS_ENDPOINT = BASE_URL + VERSION + "/status" + TRAILING_SLASH
+
+const COUNTRIES_NOW_API_ENDPOINT = "http://129.241.150.113:3500/api/v0.1/"
+const REST_COUNTRIES_API_ENDPOINT = "http://129.241.150.113:8080/v3.1/"

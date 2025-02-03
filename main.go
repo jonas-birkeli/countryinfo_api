@@ -16,6 +16,7 @@ func main() {
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}
+
 	router.HandleFunc("/diag", handlers.DiagHandler)
 	router.HandleFunc(config.INFO_ENDPOINT, handlers.InfoHandler)
 	router.HandleFunc(config.POPULATION_ENDPOINT, handlers.PopulationHandler)

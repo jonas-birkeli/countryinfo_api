@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // getCountryCodeFromPath separates the country from the path and returns it
@@ -44,4 +46,20 @@ func getYearRange(r *http.Request, key string) (int, int) {
 	}
 
 	return startYear, endYear
+}
+
+// getAPIStatus attempts to get a response from the apiURL, and returns its response.
+func getAPIStatus(apiURL string) (int, error) {
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	resp, err := client.Get(apiURL)
+	if err != nil {
+		return 0, fmt.Errorf("Failed to get API status: %v", err)
+	}
+
+	defer resp.Body.Close()
+
+	return resp.StatusCode, nil
 }
