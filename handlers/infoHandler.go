@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"assignment_1/config"
 	"fmt"
 	"net/http"
 )
@@ -11,7 +12,7 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	countryCode := getCountryCodeFromPath(r.URL.Path, "/countryinfo/v1/info/")
+	countryCode := getCountryCodeFromPath(r.URL.Path, config.INFO_ENDPOINT)
 	limit := getQueryInt(r, "limit", 10)
 
 	_, err := fmt.Fprintf(w, "Country: %s, Limit: %d\n", countryCode, limit)

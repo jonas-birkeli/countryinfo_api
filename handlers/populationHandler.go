@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"assignment_1/config"
 	"fmt"
 	"net/http"
 )
@@ -11,7 +12,7 @@ func PopulationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	countryCode := getCountryCodeFromPath(r.URL.Path, "/countryinfo/v1/population/")
+	countryCode := getCountryCodeFromPath(r.URL.Path, config.POPULATION_ENDPOINT)
 	startYear, endYear := getYearRange(r, "limit")
 
 	_, err := fmt.Fprintf(w, "Country: %s, Startyear: %d, Endyear: %d\n", countryCode, startYear, endYear)

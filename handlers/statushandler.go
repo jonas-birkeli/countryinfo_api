@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"assignment_1/config"
 	"fmt"
 	"net/http"
 )
@@ -11,7 +12,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	countryCode := getCountryCodeFromPath(r.URL.Path, "/countryinfo/v1/status/")
+	countryCode := getCountryCodeFromPath(r.URL.Path, config.STATUS_ENDPOINT)
 
 	_, err := fmt.Fprintf(w, "Country: %s\n", countryCode)
 	if err != nil {
