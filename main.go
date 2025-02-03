@@ -7,9 +7,12 @@ import (
 	"os"
 )
 
-const ENDPOINT_INFO = "/countryinfo/v1/info/"
-const ENDPOINT_POPULATION = "/countryinfo/v1/population/"
-const ENDPOINT_STATUS = "/countryinfo/v1/status/"
+const ENDPOINT = "/countryinfo"
+const VERSION = "/v1"
+const INFO_ENDPOINT = ENDPOINT + VERSION + "/info/"
+const POPULATION_ENDPOINT = ENDPOINT + VERSION + "/population/"
+const STATUS_ENDPOINT = ENDPOINT + VERSION + "/status/"
+const CONSTRAINT = "/{countryCode}"
 const PORT = "8080"
 
 func main() {
@@ -20,9 +23,10 @@ func main() {
 	if os.Getenv("PORT") != "" {
 		subPort = os.Getenv("PORT")
 	}
-	router.HandleFunc(ENDPOINT_INFO, handlers.InfoHandler)
-	router.HandleFunc(ENDPOINT_POPULATION, handlers.PopulationHandler)
-	router.HandleFunc(ENDPOINT_STATUS, handlers.StatusHandler)
+	router.HandleFunc("/diag", handlers.DiagHandler)
+	router.HandleFunc(INFO_ENDPOINT, handlers.InfoHandler)
+	router.HandleFunc(POPULATION_ENDPOINT, handlers.PopulationHandler)
+	router.HandleFunc(STATUS_ENDPOINT, handlers.StatusHandler)
 
 	log.Printf("Startinvg server now lol on port %v.", subPort)
 	log.Fatal(http.ListenAndServe(":"+subPort, router))
