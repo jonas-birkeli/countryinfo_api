@@ -7,18 +7,23 @@ import (
 	"os"
 )
 
+const ENDPOINT_INFO = "/countryinfo/v1/info/"
+const ENDPOINT_POPULATION = "/countryinfo/v1/population/"
+const ENDPOINT_STATUS = "/countryinfo/v1/status/"
+const PORT = "8080"
+
 func main() {
 
 	router := http.NewServeMux()
 
-	PORT := "23456"
+	subPort := PORT
 	if os.Getenv("PORT") != "" {
-		PORT = os.Getenv("PORT")
+		subPort = os.Getenv("PORT")
 	}
+	router.HandleFunc(ENDPOINT_INFO, handlers.InfoHandler)
+	router.HandleFunc(ENDPOINT_POPULATION, handlers.PopulationHandler)
+	router.HandleFunc(ENDPOINT_STATUS, handlers.StatusHandler)
 
-	router.HandleFunc("/diag", handlers.DiagHandler)
-	router.HandleFunc("/hei", handlers.HeiHandler)
-
-	log.Printf("Startinvg server now lol on port %v.", PORT)
-	log.Fatal(http.ListenAndServe(":"+PORT, router))
+	log.Printf("Startinvg server now lol on port %v.", subPort)
+	log.Fatal(http.ListenAndServe(":"+subPort, router))
 }
