@@ -35,7 +35,7 @@ type InfoResponse struct {
 
 // RequestCountries requests info about all countries from CountriesNowAPI, returns a struct of it.
 func RequestCountries() CountryResponse {
-	resp, err := http.Get(config.COUNTRIES_NOW_API_ENDPOINT + "countries")
+	resp, err := http.Get(config.CountriesNowApiEndpoint + "countries")
 	if err != nil {
 		panic(err)
 	}
@@ -79,7 +79,7 @@ func RequestCountryInfo[T any](endpoint, param string, paramValue string) T {
 	}
 
 	resp, err := http.Post(
-		config.COUNTRIES_NOW_API_ENDPOINT+endpoint,
+		config.CountriesNowApiEndpoint+endpoint,
 		"application/json",
 		bytes.NewBuffer(jsonPayload),
 	)
@@ -106,12 +106,18 @@ func RequestCountryInfo[T any](endpoint, param string, paramValue string) T {
 var allCountries = RequestCountries().Data
 
 func InfoHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	if r.Method != http.MethodGet {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Header().Set("Allow", "GET") // Inform client that only GET is allowed
+		_, err := fmt.Fprintln(w, `{"error": true, "msg": "Method not allowed. Use GET."}`)
+		if err != nil {
+			return
+		}
 		return
 	}
 
-	countryCode_as_iso2 := getCountryCodeFromPath(r.URL.Path, config.INFO_ENDPOINT)
+	countryCodeAsIso2 := getCountryCodeFromPath(r.URL.Path, config.InfoEndpoint)
 	limit := getQueryInt(r, "limit", 10)
 
 	var response InfoResponse
@@ -120,49 +126,51 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	country := ""
 
 	for _, _country := range allCountries {
-		if strings.ToUpper(_country.Iso2) == strings.ToUpper(countryCode_as_iso2) {
+		if strings.ToUpper(_country.Iso2) == strings.ToUpper(countryCodeAsIso2) {
 			country = _country.Country
-
-			// Get cities up to limit, check for index overflow
-
 		}
 	}
-
-	// Found no country with Iso2 code.
 	if country == "" {
-		http.Error(w, "Invalid countrycode", http.StatusBadRequest)
+		// Found no country with Iso2 code.
+		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, `{"error": true, "msg": "That's a countrycode I have never heard of before.."}`, http.StatusBadRequest)
 		return
 	}
 
+	flagInfo := RequestCountryInfo[FlagInfoResponse](config.CountriesNowApiFlagPath, "iso2", countryCodeAsIso2)
+	capitalInfo := RequestCountryInfo[CapitalInfoResponse](config.CountriesNowApiCapitalPath, "country", country)
+	citiesInfo := RequestCountryInfo[CitiesInfoResponse](config.CountriesNowApiCitiesPath, "country", country)
+	populationInfo := RequestCountryInfo[PopulationInfoResponse](config.CountriesNowApiPopulationPath, "country", country)
+
 	response.Name = country
-
-	flagInfo := RequestCountryInfo[FlagInfoResponse]("countries/flag/images", "iso2", countryCode_as_iso2)
 	response.Flag = flagInfo.Data.Flag
-
-	capitalInfo := RequestCountryInfo[CapitalInfoResponse]("countries/capital", "country", country)
 	response.Capital = capitalInfo.Data.Capital
 
-	citiesInfo := RequestCountryInfo[CitiesInfoResponse]("countries/cities", "country", country)
-
+	// Try to limit if withing bounds
 	if limit < len(citiesInfo.Data) {
 		response.Cities = citiesInfo.Data[:limit]
 	} else {
 		response.Cities = citiesInfo.Data
 	}
 
-	populationInfo := RequestCountryInfo[PopulationInfoResponse]("countries/population", "country", country)
-	// Get last value
+	// Get the latest population statistics
 	n := len(populationInfo.Data.PopulationCounts)
-
 	if n > 0 {
 		lastPopulationRecord := populationInfo.Data.PopulationCounts[n-1]
 		response.Population = lastPopulationRecord.Value
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+
 	jsonData, err := json.MarshalIndent(response, "", "  ")
-	_, err = fmt.Fprintf(w, "%s\n", string(jsonData))
 	if err != nil {
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		http.Error(w, `{"error": true, "msg": "Failed to encode JSON"}`, http.StatusInternalServerError)
 		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(jsonData)
+	if err != nil {
+		http.Error(w, `{"error": true, "msg": "Failed to write response"}`, http.StatusInternalServerError)
 	}
 }

@@ -18,9 +18,9 @@ func main() {
 	}
 
 	router.HandleFunc("/diag", handlers.DiagHandler)
-	router.HandleFunc(config.INFO_ENDPOINT, handlers.InfoHandler)
-	router.HandleFunc(config.POPULATION_ENDPOINT, handlers.PopulationHandler)
-	router.HandleFunc(config.STATUS_ENDPOINT, handlers.StatusHandler)
+	router.HandleFunc(config.InfoEndpoint, handlers.InfoHandler)
+	router.HandleFunc(config.PopulationEndpoint, handlers.PopulationHandler)
+	router.HandleFunc(config.StatusEndpoint, handlers.StatusHandler)
 
 	log.Printf("Startinvg server now lol on port %v.", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))

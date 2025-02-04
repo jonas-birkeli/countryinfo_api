@@ -12,7 +12,7 @@ func PopulationHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	countryCode := getCountryCodeFromPath(r.URL.Path, config.POPULATION_ENDPOINT)
+	countryCode := getCountryCodeFromPath(r.URL.Path, config.PopulationEndpoint)
 	startYear, endYear := getYearRange(r, "limit")
 
 	_, err := fmt.Fprintf(w, "Country: %s, Startyear: %d, Endyear: %d\n", countryCode, startYear, endYear)

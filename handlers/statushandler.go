@@ -24,13 +24,13 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Access countriesNowAPI
-	countriesNowAPIStatus, err := getAPIStatus(config.COUNTRIES_NOW_API_ENDPOINT)
+	countriesNowAPIStatus, err := getAPIStatus(config.CountriesNowApiEndpoint)
 	if err != nil {
 		return
 	}
 
 	// Access restCountriesAPI
-	restCountriesAPIStatus, err := getAPIStatus(config.REST_COUNTRIES_API_ENDPOINT)
+	restCountriesAPIStatus, err := getAPIStatus(config.RestCountriesApiEndpoint)
 	if err != nil {
 		return
 	}
