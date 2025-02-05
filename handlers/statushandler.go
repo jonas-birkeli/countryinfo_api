@@ -18,19 +18,21 @@ type StatusResponse struct {
 var startTime = time.Now()
 
 func StatusHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", config.ApplicationOrJsonSpecifier)
 	if r.Method != http.MethodGet {
+
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Access countriesNowAPI
-	countriesNowAPIStatus, err := getAPIStatus(config.CountriesNowApiEndpoint)
+	countriesNowAPIStatus, err := getAPIStatus(config.CountriesNowAPI, config.CountriesNowAPIAccessableEndpointForTesting)
 	if err != nil {
 		return
 	}
 
 	// Access restCountriesAPI
-	restCountriesAPIStatus, err := getAPIStatus(config.RestCountriesApiEndpoint)
+	restCountriesAPIStatus, err := getAPIStatus(config.RestCountriesAPI, config.RestCountriesAPIAccessableEndpointForTesting)
 	if err != nil {
 		return
 	}
@@ -40,13 +42,11 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	status := StatusResponse{
 		CountriesNowAPI:  countriesNowAPIStatus,
 		RestCountriesAPI: restCountriesAPIStatus,
-		Version:          config.VERSION,
+		Version:          "v1",
 		Uptime:           uptime,
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-
 	if err := json.NewEncoder(w).Encode(status); err != nil {
 		http.Error(w, fmt.Sprintf("Error encoding JSON: %s", err), http.StatusInternalServerError)
 		return

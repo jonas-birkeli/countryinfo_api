@@ -1,22 +1,25 @@
 package config
 
-// This projects constant pathing \\
+const (
+	Port    = "8080"
+	BaseAPI = "/countryinfo/v1"
 
-const PORT = "8080"
-const BaseUrl = "/countryinfo/"
-const VERSION = "v1"
+	// Local endpoints
+	EndpointInfo       = BaseAPI + "/info/"
+	EndpointPopulation = BaseAPI + "/population/"
+	EndpointStatus     = BaseAPI + "/status/"
 
-const TrailingSlash = "/"
-const InfoEndpoint = BaseUrl + VERSION + "/info/"
-const PopulationEndpoint = BaseUrl + VERSION + "/population/"
-const StatusEndpoint = BaseUrl + VERSION + "/status/"
+	// External APIs base URLs
+	CountriesNowAPI                              = "http://129.241.150.113:3500/api/v0.1"
+	RestCountriesAPI                             = "http://129.241.150.113:8080/v3.1"
+	CountriesNowAPIAccessableEndpointForTesting  = "/countries"
+	RestCountriesAPIAccessableEndpointForTesting = "/all"
 
-// Constants for APIs used \\
+	// Path suffixes
+	PathPopulation = "/countries/population"
+	PathFlag       = "/countries/flag/images"
+	PathCities     = "/countries/cities"
+	PathCapital    = "/countries/capital"
 
-const CountriesNowApiEndpoint = "http://129.241.150.113:3500/api/v0.1/countries/"
-const RestCountriesApiEndpoint = "http://129.241.150.113:8080/v3.1/all"
-
-const CountriesNowApiPopulationPath = "population"
-const CountriesNowApiFlagPath = "flag/images"
-const CountriesNowApiCitiesPath = "cities"
-const CountriesNowApiCapitalPath = "capital"
+	ApplicationOrJsonSpecifier = "application/json"
+)

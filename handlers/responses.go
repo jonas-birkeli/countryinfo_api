@@ -1,8 +1,28 @@
 package handlers
 
-/*
- * Find country from ISO2 code
- */
+type InfoResponse struct {
+	/*
+		{
+			"name": "Norway",
+			"continents": ["Europe"],
+			"population": 4700000,
+			"languages": {"nno":"Norwegian Nynorsk","nob":"Norwegian Bokmål","smi":"Sami"},
+			"borders": ["FIN","SWE","RUS"],
+			"flag": "https://flagcdn.com/w320/no.png",
+			"capital": "Oslo",
+			"cities": ["Abelvaer","Adalsbruk","Adland","Agotnes","Agskardet..."]
+		}
+	*/
+	Name       string            `json:"name"`
+	Continents []string          `json:"continents"`
+	Population int               `json:"population"`
+	Languages  map[string]string `json:"languages"`
+	Borders    []string          `json:"borders"`
+	Flag       string            `json:"flag"`
+	Capital    string            `json:"capital"`
+	Cities     []string          `json:"cities"`
+}
+
 type CountryResponse struct {
 	Error bool   `json:"error"`
 	Msg   string `json:"msg"`
