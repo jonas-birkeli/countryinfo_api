@@ -1,4 +1,3 @@
-// config/config.go
 package config
 
 import (
@@ -16,6 +15,7 @@ type Config struct {
 	ContentType  string
 }
 
+// ExternalAPIConfig holds configuration values for external APIs
 type ExternalAPIConfig struct {
 	CountriesNowAPI  string
 	RestCountriesAPI string
@@ -23,17 +23,20 @@ type ExternalAPIConfig struct {
 	Paths            PathConfig
 }
 
+// TestEndpointConfig holds configuration values for test endpoints
 type TestEndpointConfig struct {
 	CountriesNow  string
 	RestCountries string
 }
 
+// EndpointConfig holds configuration values for endpoints
 type EndpointConfig struct {
 	Info       string
 	Population string
 	Status     string
 }
 
+// PathConfig holds configuration values for paths
 type PathConfig struct {
 	Population string
 	Flag       string

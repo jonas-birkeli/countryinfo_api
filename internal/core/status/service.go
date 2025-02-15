@@ -1,4 +1,3 @@
-// internal/core/status/service.go
 package status
 
 import (
@@ -9,12 +8,14 @@ import (
 	"time"
 )
 
+// Service defines methods for status operations
 type service struct {
 	startTime           time.Time
 	countriesNowClient  *countriesnow.Client
 	restCountriesClient *restcountries.Client
 }
 
+// Service interface defines methods for status operations
 func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) Service {
 	return &service{
 		startTime:           time.Now(),
@@ -23,8 +24,7 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 	}
 }
 
-
-
+// GetStatus returns status information
 func (s *service) checkCountriesNowAPI() string {
 	resp, err := http.Get(s.countriesNowClient.GetBaseURL() + "/countries")
 	if err != nil {
@@ -34,6 +34,7 @@ func (s *service) checkCountriesNowAPI() string {
 	return http.StatusText(resp.StatusCode)
 }
 
+// GetStatus returns status information
 func (s *service) checkRestCountriesAPI() string {
 	resp, err := http.Get(s.restCountriesClient.GetBaseURL() + "/all")
 	if err != nil {
@@ -43,6 +44,7 @@ func (s *service) checkRestCountriesAPI() string {
 	return http.StatusText(resp.StatusCode)
 }
 
+// GetStatus returns status information
 func (s *service) GetStatus(ctx context.Context) (*StatusInfo, error) {
 	// Check CountriesNow API
 	cnStatus := s.checkCountriesNowAPI()

@@ -1,4 +1,3 @@
-// core/population/service.go
 package population
 
 import (
@@ -7,16 +6,19 @@ import (
 	"errors"
 )
 
+// Service defines methods for population operations
 type service struct {
 	countriesNowClient *countriesnow.Client
 }
 
+// Service interface defines methods for population operations
 func NewService(cnClient *countriesnow.Client) Service {
 	return &service{
 		countriesNowClient: cnClient,
 	}
 }
 
+// GetPopulationData returns population data for a country
 func (s *service) GetPopulationData(ctx context.Context, code string, timeRange *TimeRange) (*PopulationData, error) {
 	// Get population data from CountriesNow API
 	data, err := s.countriesNowClient.GetPopulation(ctx, code)

@@ -1,4 +1,3 @@
-// error.go
 package responses
 
 // ErrorResponse represents an error response

@@ -1,4 +1,3 @@
-// core/population/models.go
 package population
 
 import (
@@ -23,6 +22,7 @@ type TimeRange struct {
 	EndYear   int
 }
 
+// Service interface defines methods for population operations
 type Service interface {
 	GetPopulationData(ctx context.Context, code string, timeRange *TimeRange) (*PopulationData, error)
 }

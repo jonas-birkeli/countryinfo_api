@@ -1,7 +1,6 @@
-// models.go
 package responses
 
-// Base response interface
+// Response represents a basic response
 type Response interface {
 	isResponse()
 }

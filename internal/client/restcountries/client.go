@@ -1,4 +1,3 @@
-// client/restcountries/client.go
 package restcountries
 
 import (
@@ -9,11 +8,13 @@ import (
 	"net/http"
 )
 
+// Client is the client for the RestCountries API
 type Client struct {
 	baseURL    string
 	httpClient *http.Client
 }
 
+// CountryInfo is the structure for the response from the RestCountries API
 type CountryInfo struct {
 	Name struct {
 		Common     string `json:"common"`
@@ -39,6 +40,7 @@ func (c *Client) GetBaseURL() string {
 	return c.baseURL
 }
 
+// NewClient creates a new RestCountries client
 func NewClient(cfg *config.Config) *Client {
 	return &Client{
 		baseURL:    cfg.ExternalAPIs.RestCountriesAPI,
@@ -46,6 +48,7 @@ func NewClient(cfg *config.Config) *Client {
 	}
 }
 
+// GetCountryByCode retrieves country information by country code
 func (c *Client) GetCountryByCode(ctx context.Context, code string) (*CountryInfo, error) {
 	req, err := http.NewRequestWithContext(
 		ctx,

@@ -1,4 +1,3 @@
-// internal/api/handlers/population.go
 package handlers
 
 import (
@@ -9,12 +8,15 @@ import (
 	"strings"
 )
 
+// populationSvc is the population service
 var populationSvc population.Service
 
+// InitPopulationService initializes the population service
 func InitPopulationService(svc population.Service) {
 	populationSvc = svc
 }
 
+// PopulationHandler handles requests for population data
 func PopulationHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeJSONResponse(w, http.StatusMethodNotAllowed, responses.ErrorResponse{

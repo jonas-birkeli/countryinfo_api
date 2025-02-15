@@ -1,4 +1,3 @@
-// client/countriesnow/client.go
 package countriesnow
 
 import (
@@ -11,6 +10,7 @@ import (
 	"sync"
 )
 
+// Client is the client for the CountriesNow API
 type Client struct {
 	baseURL    string
 	httpClient *http.Client
@@ -19,6 +19,7 @@ type Client struct {
 	mu           sync.RWMutex // For safe concurrent access
 }
 
+// countryListResponse is the structure for the response from the countries endpoint
 type countryListResponse struct {
 	Error bool   `json:"error"`
 	Msg   string `json:"msg"`
@@ -33,6 +34,7 @@ func (c *Client) GetBaseURL() string {
 	return c.baseURL
 }
 
+// NewClient creates a new CountriesNow client
 func NewClient(cfg *config.Config) (*Client, error) {
 	client := &Client{
 		baseURL:      cfg.ExternalAPIs.CountriesNowAPI,
@@ -48,6 +50,7 @@ func NewClient(cfg *config.Config) (*Client, error) {
 	return client, nil
 }
 
+// initializeCountryMap retrieves the list of countries and initializes the ISO to country map
 func (c *Client) initializeCountryMap() error {
 	req, err := http.NewRequest("GET", c.baseURL+"/countries", nil)
 	if err != nil {
@@ -140,11 +143,13 @@ type populationResponse struct {
 	Population  []populationEntry `json:"populationCounts"`
 }
 
+// populationEntry represents population data for a specific year
 type populationEntry struct {
 	Year  int `json:"year"`
 	Value int `json:"value"`
 }
 
+// YearValue represents population for a specific year
 type YearValue struct {
 	Year  int `json:"year"`
 	Value int `json:"value"`

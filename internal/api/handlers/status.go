@@ -1,4 +1,3 @@
-// internal/api/handlers/status.go
 package handlers
 
 import (
@@ -7,6 +6,7 @@ import (
 	"net/http"
 )
 
+// statusSvc is the status service
 var statusSvc status.Service
 
 // InitStatusService initializes the status service
@@ -14,6 +14,7 @@ func InitStatusService(svc status.Service) {
 	statusSvc = svc
 }
 
+// StatusHandler handles requests for status information
 func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeJSONResponse(w, http.StatusMethodNotAllowed, responses.ErrorResponse{

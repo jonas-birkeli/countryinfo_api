@@ -1,4 +1,3 @@
-// internal/core/country/service.go
 package country
 
 import (
@@ -9,14 +8,16 @@ import (
 	"strconv"
 )
 
+// Service defines methods for country operations
+var defaultService Service
+
 // service implements the Service interface
 type service struct {
 	countriesNowClient  *countriesnow.Client
 	restCountriesClient *restcountries.Client
 }
 
-var defaultService Service
-
+// NewService creates a new country service
 func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) Service {
 	return &service{
 		countriesNowClient:  cnClient,
@@ -24,14 +25,17 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 	}
 }
 
+// InitService initializes the default country service
 func InitService(cnClient *countriesnow.Client, rcClient *restcountries.Client) {
 	defaultService = NewService(cnClient, rcClient)
 }
 
+// GetService returns the default country service
 func GetService() Service {
 	return defaultService
 }
 
+// GetCountryInfo returns information about a country
 func (s *service) GetCountryInfo(ctx context.Context, code string, cityLimit string) (*CountryInfo, error) {
 	// Get base country info from REST Countries API
 	restCountryInfo, err := s.restCountriesClient.GetCountryByCode(ctx, code)

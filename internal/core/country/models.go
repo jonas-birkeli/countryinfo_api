@@ -1,4 +1,3 @@
-// core/country/models.go
 package country
 
 import (

@@ -1,4 +1,3 @@
-// country.go
 package responses
 
 // CountryInfoResponse represents the response for country information
@@ -13,4 +12,5 @@ type CountryInfoResponse struct {
 	Cities     []string          `json:"cities,omitempty"`
 }
 
+// CountryInfoResponse represents the response for country information
 func (r CountryInfoResponse) isResponse() {}

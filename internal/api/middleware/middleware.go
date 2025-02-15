@@ -1,4 +1,3 @@
-// middleware.go
 package middleware
 
 import (
@@ -60,7 +59,7 @@ func CORS(next http.Handler) http.Handler {
 // RequestID adds a request ID to each request
 func RequestID(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Could use UUID but staying with standard library
+		// Could use UUID but staying with a standard library
 		requestID := time.Now().UnixNano()
 		w.Header().Set("X-Request-ID", strconv.FormatInt(requestID, 10))
 

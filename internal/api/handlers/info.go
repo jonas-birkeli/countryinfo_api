@@ -1,4 +1,3 @@
-// info.go
 package handlers
 
 import "C"
