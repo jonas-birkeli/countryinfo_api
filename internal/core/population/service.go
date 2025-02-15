@@ -1,0 +1,55 @@
+// core/population/service.go
+package population
+
+import (
+	"assignment_1/internal/client/countriesnow"
+	"context"
+	"errors"
+)
+
+type service struct {
+	countriesNowClient *countriesnow.Client
+}
+
+func NewService(cnClient *countriesnow.Client) Service {
+	return &service{
+		countriesNowClient: cnClient,
+	}
+}
+
+func (s *service) GetPopulationData(ctx context.Context, code string, timeRange *TimeRange) (*PopulationData, error) {
+	// Get population data from CountriesNow API
+	data, err := s.countriesNowClient.GetPopulation(ctx, code)
+	if err != nil {
+		return nil, err
+	}
+
+	// Filter by time range if provided
+	var filteredValues []YearValue
+	var sum int
+	count := 0
+
+	for _, v := range data {
+		if timeRange != nil {
+			if v.Year < timeRange.StartYear || v.Year > timeRange.EndYear {
+				continue
+			}
+		}
+
+		filteredValues = append(filteredValues, YearValue{
+			Year:  v.Year,
+			Value: v.Value,
+		})
+		sum += v.Value
+		count++
+	}
+
+	if count == 0 {
+		return nil, errors.New("no population data found for given time range")
+	}
+
+	return &PopulationData{
+		Mean:   sum / count,
+		Values: filteredValues,
+	}, nil
+}

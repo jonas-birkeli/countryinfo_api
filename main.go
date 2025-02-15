@@ -1,27 +1,101 @@
+// main.go
 package main
 
 import (
-	"assignment_1/config"
-	"assignment_1/handlers"
+	"assignment_1/internal/client/countriesnow"
+	"assignment_1/internal/client/restcountries"
+	"assignment_1/internal/core/country"
+	"assignment_1/internal/core/population"
+	"assignment_1/internal/core/status"
+	"context"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"assignment_1/internal/api/handlers"
+	"assignment_1/internal/api/middleware"
+	"assignment_1/internal/config"
 )
 
 func main() {
+	// Initialize configuration
+	cfg := config.NewConfig()
+	cfg.Init()
 
-	router := http.NewServeMux()
+	// Create a new ServeMux
+	mux := http.NewServeMux()
 
-	port := config.Port
-	if os.Getenv("PORT") != "" {
-		port = os.Getenv("PORT")
+	// Create clients
+	countriesNowClient, err := countriesnow.NewClient(cfg)
+	if err != nil {
+		log.Fatalf("Failed to initialize CountriesNow client: %v\n", err)
+	}
+	restCountriesClient := restcountries.NewClient(cfg)
+
+	// Initialize the service
+	country.InitService(countriesNowClient, restCountriesClient)
+
+	// Create services
+	populationService := population.NewService(countriesNowClient)
+	statusService := status.NewService(countriesNowClient, restCountriesClient)
+
+	// Initialize services
+	handlers.InitStatusService(statusService)
+
+	// Register handlers with config
+	handlers.RegisterHandlers(mux, cfg, populationService)
+
+	// Apply a middleware chain
+	handler := middleware.Chain(mux,
+		middleware.Recover,
+		middleware.Logger,
+		middleware.RequestID,
+		middleware.CORS,
+	)
+
+	// Create server
+	server := &http.Server{
+		Addr:         ":" + cfg.Port,
+		Handler:      handler,
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
 	}
 
-	router.HandleFunc("/diag", handlers.DiagHandler)
-	router.HandleFunc(config.EndpointInfo, handlers.InfoHandler)
-	router.HandleFunc(config.EndpointPopulation, handlers.PopulationHandler)
-	router.HandleFunc(config.EndpointStatus, handlers.StatusHandler)
+	// Channel for server errors
+	serverErrors := make(chan error, 1)
 
-	log.Printf("Startinvg server now lol on port %v.", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	// Start server
+	go func() {
+		log.Printf("Server is starting on port %s", cfg.Port)
+		serverErrors <- server.ListenAndServe()
+	}()
+
+	// Channel for shutdown signals
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
+
+	// Wait for shutdown or error
+	select {
+	case err := <-serverErrors:
+		log.Fatalf("Error starting server: %v", err)
+
+	case sig := <-shutdown:
+		log.Printf("Start shutdown... Signal: %v", sig)
+
+		// Create shutdown context with timeout
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		// Attempt a graceful shutdown
+		if err := server.Shutdown(ctx); err != nil {
+			log.Printf("Graceful shutdown failed: %v", err)
+			server.Close()
+		}
+	}
+
+	log.Println("Server shutdown complete")
 }
