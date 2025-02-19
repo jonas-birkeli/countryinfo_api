@@ -70,7 +70,7 @@ func (c *Client) GetCountryByCode(ctx context.Context, code string) (*CountryInf
 		return nil, fmt.Errorf("API error: status code %d", resp.StatusCode)
 	}
 
-	// Decode into array of CountryInfo since API returns array
+	// Decode into an array of CountryInfo since the API returns array
 	var countries []CountryInfo
 	if err := json.NewDecoder(resp.Body).Decode(&countries); err != nil {
 		return nil, fmt.Errorf("error decoding response: %w", err)

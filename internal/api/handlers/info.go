@@ -17,7 +17,7 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract country code from path
+	// Extract country code from a path
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) < 4 {
 		writeJSONResponse(w, http.StatusBadRequest, responses.ErrorResponse{

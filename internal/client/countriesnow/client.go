@@ -6,6 +6,7 @@ import (
 	"countryinfo/internal/config"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 	"sync"
@@ -13,11 +14,10 @@ import (
 
 // Client is the client for the CountriesNow API
 type Client struct {
-	baseURL    string
-	httpClient *http.Client
-	// Add a map for ISO to country name mapping
-	isoToCountry map[string]string
-	mu           sync.RWMutex // For safe concurrent access
+	baseURL      string
+	httpClient   *http.Client
+	isoToCountry map[string]string // Storing in the client to allow a single request
+	mu           sync.RWMutex      // For safe concurrent access
 }
 
 // countryListResponse is the structure for the response from the countries endpoint
@@ -62,7 +62,12 @@ func (c *Client) initializeCountryMap() error {
 	if err != nil {
 		return fmt.Errorf("error making request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			return
+		}
+	}(resp.Body)
 
 	var response countryListResponse
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
@@ -204,7 +209,12 @@ func (c *Client) doRequest(req *http.Request, response *countriesnowResponse) er
 	if err != nil {
 		return fmt.Errorf("error making request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			return
+		}
+	}(resp.Body)
 
 	if err := json.NewDecoder(resp.Body).Decode(response); err != nil {
 		return fmt.Errorf("error decoding response: %w", err)

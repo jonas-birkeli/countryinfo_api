@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"countryinfo/internal/config" // Update this import to match your module name
+	"countryinfo/internal/config"
 	"countryinfo/internal/core/population"
 	"net/http"
 )
