@@ -15,7 +15,7 @@ func writeJSONResponse(w http.ResponseWriter, code int, data interface{}) {
 
 // validateCountryCode validates the two-letter country code
 func validateCountryCode(code string) bool {
-	if len(code) == 2 {
+	if len(code) != 2 {
 		return false
 	}
 
@@ -24,5 +24,6 @@ func validateCountryCode(code string) bool {
 			return false
 		}
 	}
+
 	return true
 }

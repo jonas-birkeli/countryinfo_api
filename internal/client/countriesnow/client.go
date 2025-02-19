@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 	"sync"
 )
 
@@ -86,7 +85,7 @@ func (c *Client) initializeCountryMap() error {
 // GetCountryName returns the full country name for an ISO code. Not case-sensitive
 func (c *Client) GetCountryName(isoCode string) (string, error) {
 	c.mu.RLock()
-	countryName, ok := c.isoToCountry[strings.ToUpper(isoCode)]
+	countryName, ok := c.isoToCountry[isoCode]
 	c.mu.RUnlock()
 
 	if !ok {
