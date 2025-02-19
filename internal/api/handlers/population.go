@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"assignment_1/internal/core/population"
-	"assignment_1/internal/responses"
+	"countryinfo/internal/core/population"
+	"countryinfo/internal/responses"
 	"net/http"
 	"strconv"
 	"strings"

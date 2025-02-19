@@ -1,8 +1,8 @@
 package population
 
 import (
-	"assignment_1/internal/client/countriesnow"
 	"context"
+	"countryinfo/internal/client/countriesnow"
 	"errors"
 )
 

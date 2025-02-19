@@ -1,8 +1,8 @@
 package restcountries
 
 import (
-	"assignment_1/internal/config"
 	"context"
+	"countryinfo/internal/config"
 	"encoding/json"
 	"fmt"
 	"net/http"

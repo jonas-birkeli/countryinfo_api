@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"assignment_1/internal/core/status"
-	"assignment_1/internal/responses"
+	"countryinfo/internal/core/status"
+	"countryinfo/internal/responses"
 	"net/http"
 )
 

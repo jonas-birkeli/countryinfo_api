@@ -1,9 +1,9 @@
 package country
 
 import (
-	"assignment_1/internal/client/countriesnow"
-	"assignment_1/internal/client/restcountries"
 	"context"
+	"countryinfo/internal/client/countriesnow"
+	"countryinfo/internal/client/restcountries"
 	"errors"
 	"strconv"
 )

@@ -1,3 +1,3 @@
-module assignment_1
+module countryinfo
 
 go 1.23

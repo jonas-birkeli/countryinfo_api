@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"assignment_1/internal/config" // Update this import to match your module name
-	"assignment_1/internal/core/population"
+	"countryinfo/internal/config" // Update this import to match your module name
+	"countryinfo/internal/core/population"
 	"net/http"
 )
 

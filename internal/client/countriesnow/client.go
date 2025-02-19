@@ -1,12 +1,13 @@
 package countriesnow
 
 import (
-	"assignment_1/internal/config"
 	"bytes"
 	"context"
+	"countryinfo/internal/config"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -77,10 +78,10 @@ func (c *Client) initializeCountryMap() error {
 	return nil
 }
 
-// GetCountryName returns the full country name for an ISO code
+// GetCountryName returns the full country name for an ISO code. Not case-sensitive
 func (c *Client) GetCountryName(isoCode string) (string, error) {
 	c.mu.RLock()
-	countryName, ok := c.isoToCountry[isoCode]
+	countryName, ok := c.isoToCountry[strings.ToUpper(isoCode)]
 	c.mu.RUnlock()
 
 	if !ok {

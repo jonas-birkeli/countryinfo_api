@@ -2,8 +2,8 @@ package handlers
 
 import "C"
 import (
-	"assignment_1/internal/core/country"
-	"assignment_1/internal/responses"
+	"countryinfo/internal/core/country"
+	"countryinfo/internal/responses"
 	"net/http"
 	"strings"
 )

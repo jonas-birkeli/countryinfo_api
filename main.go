@@ -2,22 +2,21 @@
 package main
 
 import (
-	"assignment_1/internal/client/countriesnow"
-	"assignment_1/internal/client/restcountries"
-	"assignment_1/internal/core/country"
-	"assignment_1/internal/core/population"
-	"assignment_1/internal/core/status"
 	"context"
+	"countryinfo/internal/api/handlers"
+	"countryinfo/internal/api/middleware"
+	"countryinfo/internal/client/countriesnow"
+	"countryinfo/internal/client/restcountries"
+	"countryinfo/internal/config"
+	"countryinfo/internal/core/country"
+	"countryinfo/internal/core/population"
+	"countryinfo/internal/core/status"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"assignment_1/internal/api/handlers"
-	"assignment_1/internal/api/middleware"
-	"assignment_1/internal/config"
 )
 
 func main() {
