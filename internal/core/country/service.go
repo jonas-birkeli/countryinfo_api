@@ -43,12 +43,6 @@ func (s *service) GetCountryInfo(ctx context.Context, code string, cityLimit str
 		return nil, err
 	}
 
-	// Get cities from CountriesNow API - use the common name
-	cities, err := s.countriesNowClient.GetCities(ctx, restCountryInfo.Name.Common)
-	if err != nil {
-		return nil, err
-	}
-
 	// Parse city limit with default of 10
 	limit := 10 // Default limit
 	if cityLimit != "" {
@@ -59,6 +53,12 @@ func (s *service) GetCountryInfo(ctx context.Context, code string, cityLimit str
 		if parsedLimit > 0 {
 			limit = parsedLimit
 		}
+	}
+
+	// Get cities from CountriesNow API - use the common name
+	cities, err := s.countriesNowClient.GetCities(ctx, restCountryInfo.Name.Common, limit)
+	if err != nil {
+		return nil, err
 	}
 
 	// Apply the limit

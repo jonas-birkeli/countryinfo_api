@@ -12,7 +12,7 @@ import (
 func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeJSONResponse(w, http.StatusMethodNotAllowed, responses.ErrorResponse{
-			Error: "Method not allowed",
+			Error: "method not allowed",
 		})
 		return
 	}
@@ -21,7 +21,7 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) < 4 {
 		writeJSONResponse(w, http.StatusBadRequest, responses.ErrorResponse{
-			Error: "Invalid path",
+			Error: "invalid path",
 		})
 		return
 	}
@@ -29,14 +29,13 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	countryCode := parts[4]
 	if !validateCountryCode(countryCode) {
 		writeJSONResponse(w, http.StatusBadRequest, responses.ErrorResponse{
-			Error: "Invalid country code",
+			Error: "invalid country code",
 		})
 		return
 	}
 
 	// Get query parameters
 	limit := r.URL.Query().Get("limit")
-	// Add limit parsing logic here
 
 	// Call service layer
 	info, err := country.GetService().GetCountryInfo(r.Context(), countryCode, limit)

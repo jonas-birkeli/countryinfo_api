@@ -28,7 +28,7 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 
 // GetStatus returns status information
 func (s *service) checkCountriesNowAPI() string {
-	resp, err := http.Get(s.countriesNowClient.GetBaseURL() + "/countries")
+	resp, err := http.Head(s.countriesNowClient.GetBaseURL() + "/countries")
 	if err != nil {
 		return "Error"
 	}
@@ -38,7 +38,7 @@ func (s *service) checkCountriesNowAPI() string {
 
 // GetStatus returns status information
 func (s *service) checkRestCountriesAPI() string {
-	resp, err := http.Get(s.restCountriesClient.GetBaseURL() + "/all")
+	resp, err := http.Head(s.restCountriesClient.GetBaseURL() + "/all")
 	if err != nil {
 		return "Error"
 	}
