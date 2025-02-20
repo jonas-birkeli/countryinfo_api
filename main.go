@@ -59,9 +59,9 @@ func main() {
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
 		Handler:      handler,
-		ReadTimeout:  15 * time.Second,
-		WriteTimeout: 15 * time.Second,
-		IdleTimeout:  60 * time.Second,
+		ReadTimeout:  cfg.Timeout.ReadTimeout * time.Second,
+		WriteTimeout: cfg.Timeout.WriteTimeout * time.Second,
+		IdleTimeout:  cfg.Timeout.IdleTimeout * time.Second,
 	}
 
 	// Channel for server errors

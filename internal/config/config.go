@@ -13,6 +13,7 @@ type Config struct {
 	ExternalAPIs ExternalAPIConfig
 	Endpoints    EndpointConfig
 	ContentType  string
+	Timeout      TimeoutConfig
 }
 
 // ExternalAPIConfig holds configuration values for external APIs
@@ -44,6 +45,12 @@ type PathConfig struct {
 	Capital    string
 }
 
+type TimeoutConfig struct {
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
+	IdleTimeout  time.Duration
+}
+
 // NewConfig creates a new configuration with default values
 func NewConfig() *Config {
 	return &Config{
@@ -64,6 +71,11 @@ func NewConfig() *Config {
 				Cities:     "/countries/cities",
 				Capital:    "/countries/capital",
 			},
+		},
+		Timeout: TimeoutConfig{
+			ReadTimeout:  15,
+			WriteTimeout: 15,
+			IdleTimeout:  60,
 		},
 	}
 }

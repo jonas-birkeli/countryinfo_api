@@ -21,8 +21,8 @@ This service aggregates data from multiple third-party APIs to provide consolida
 
 Clone the repository:
 ```bash
-git clone <repository-url>
-cd countryinfo-api
+git clone <https://git.gvk.idi.ntnu.no/course/prog2005/prog2005-2025-workspace/jonasbirkeli/assignment_1>
+cd assignment_1
 ```
 
 ### Building
@@ -123,8 +123,8 @@ Returns information about the service's dependencies and uptime.
 Example response:
 ```json
 {
-   "countriesnowapi": 200,
-   "restcountriesapi": 200,
+   "countriesnowapi": "OK",
+   "restcountriesapi": "OK",
    "version": "v1",
    "uptime": 3600
 }
