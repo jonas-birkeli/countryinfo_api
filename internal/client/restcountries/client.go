@@ -3,6 +3,7 @@ package restcountries
 import (
 	"context"
 	"countryinfo/internal/config"
+	"countryinfo/internal/responses"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -84,4 +85,35 @@ func (c *Client) GetCountryByCode(ctx context.Context, code string) (*CountryInf
 	// Return first (and should be only) country
 
 	return &countries[0], nil
+}
+
+// TranslateCountryCode translates the Iso2-code to its common country name
+func (c *Client) TranslateCountryCode(ctx context.Context, code string) (string, error) {
+	req, err := http.NewRequestWithContext(
+		ctx,
+		"GET",
+		fmt.Sprintf("%s/alpha/%s?fields=name", c.baseURL, code),
+		nil,
+	)
+
+	if err != nil {
+		return "", fmt.Errorf("error creating request: %w", err)
+	}
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("error making request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("API error: status code %d", resp.StatusCode)
+	}
+
+	var fieldName responses.FieldsName
+	if err := json.NewDecoder(resp.Body).Decode(&fieldName); err != nil {
+		return "", fmt.Errorf("error decoding response: %w", err)
+	}
+
+	return fieldName.Name.Common, nil
 }

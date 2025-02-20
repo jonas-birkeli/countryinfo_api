@@ -8,16 +8,20 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
-	"sync"
-)
+	/*
+		"strings"
+		"sync"
+	*/)
 
 // Client is the client for the CountriesNow API
 type Client struct {
-	baseURL      string
-	httpClient   *http.Client
-	isoToCountry map[string]string // Storing in the client to allow a single request
-	mu           sync.RWMutex      // For safe concurrent access
+	baseURL    string
+	httpClient *http.Client
+	/*
+		Removal of old caching technique
+		isoToCountry map[string]string // Storing in the client to allow a single request
+		mu           sync.RWMutex      // For safe concurrent access
+	*/
 }
 
 // countryListResponse is the structure for the response from the countries endpoint
@@ -38,19 +42,26 @@ func (c *Client) GetBaseURL() string {
 // NewClient creates a new CountriesNow client
 func NewClient(cfg *config.Config) (*Client, error) {
 	client := &Client{
-		baseURL:      cfg.ExternalAPIs.CountriesNowAPI,
-		httpClient:   &http.Client{},
-		isoToCountry: make(map[string]string),
+		baseURL:    cfg.ExternalAPIs.CountriesNowAPI,
+		httpClient: &http.Client{},
+		/*
+			Removal of old caching technique
+			isoToCountry: make(map[string]string),
+		*/
 	}
-
-	// Initialize the ISO to country mapping
-	if err := client.initializeCountryMap(); err != nil {
-		return nil, fmt.Errorf("failed to initialize country mapping: %w", err)
-	}
+	/*
+		Removal of old caching technique
+		// Initialize the ISO to country mapping
+		if err := client.initializeCountryMap(); err != nil {
+			return nil, fmt.Errorf("failed to initialize country mapping: %w", err)
+		}
+	*/
 
 	return client, nil
 }
 
+/*
+Removal of old caching technique
 // initializeCountryMap retrieves the list of countries and initializes the ISO to country map
 func (c *Client) initializeCountryMap() error {
 	req, err := http.NewRequest("GET", c.baseURL+"/countries", nil)
@@ -94,6 +105,7 @@ func (c *Client) GetCountryName(isoCode string) (string, error) {
 	}
 	return countryName, nil
 }
+*/
 
 // countriesnowResponse is a generic response structure
 type countriesnowResponse struct {
@@ -162,11 +174,14 @@ type YearValue struct {
 }
 
 // GetPopulation retrieves population data for a country
-func (c *Client) GetPopulation(ctx context.Context, isoCode string) ([]YearValue, error) {
-	countryName, err := c.GetCountryName(isoCode)
-	if err != nil {
-		return nil, err
-	}
+func (c *Client) GetPopulation(ctx context.Context, countryName string) ([]YearValue, error) {
+	/*
+		Removal of old caching technique
+		countryName, err := c.GetCountryName(isoCode)
+		if err != nil {
+			return nil, err
+		}
+	*/
 
 	req, err := http.NewRequestWithContext(
 		ctx,

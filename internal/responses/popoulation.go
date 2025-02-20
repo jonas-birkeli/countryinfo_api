@@ -14,3 +14,9 @@ type PopulationYearValue struct {
 
 // isResponse is a marker function to differentiate between response types
 func (r PopulationResponse) isResponse() {}
+
+type FieldsName struct {
+	Name struct {
+		Common string `json:"common"`
+	} `json:"name"`
+}

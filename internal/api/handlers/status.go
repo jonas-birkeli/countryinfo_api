@@ -23,7 +23,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status, err := statusSvc.GetStatus(r.Context())
+	serviceStatus, err := statusSvc.GetStatus(r.Context())
 	if err != nil {
 		writeJSONResponse(w, http.StatusInternalServerError, responses.ErrorResponse{
 			Error: "Failed to get status",
@@ -31,5 +31,5 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSONResponse(w, http.StatusOK, status)
+	writeJSONResponse(w, http.StatusOK, serviceStatus)
 }

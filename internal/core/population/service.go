@@ -3,25 +3,33 @@ package population
 import (
 	"context"
 	"countryinfo/internal/client/countriesnow"
+	"countryinfo/internal/client/restcountries"
 	"errors"
 )
 
 // Service defines methods for population operations
 type service struct {
-	countriesNowClient *countriesnow.Client
+	countriesNowClient  *countriesnow.Client
+	restCountriesClient *restcountries.Client
 }
 
 // Service interface defines methods for population operations
-func NewService(cnClient *countriesnow.Client) Service {
+func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) Service {
 	return &service{
-		countriesNowClient: cnClient,
+		countriesNowClient:  cnClient,
+		restCountriesClient: rcClient,
 	}
 }
 
 // GetPopulationData returns population data for a country
 func (s *service) GetPopulationData(ctx context.Context, code string, timeRange *TimeRange) (*PopulationData, error) {
+	countryName, err := s.restCountriesClient.TranslateCountryCode(ctx, code)
+	if err != nil {
+		return nil, err
+	}
+
 	// Get population data from CountriesNow API
-	data, err := s.countriesNowClient.GetPopulation(ctx, code)
+	data, err := s.countriesNowClient.GetPopulation(ctx, countryName)
 	if err != nil {
 		return nil, err
 	}

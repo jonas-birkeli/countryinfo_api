@@ -38,7 +38,7 @@ func main() {
 	country.InitService(countriesNowClient, restCountriesClient)
 
 	// Create services
-	populationService := population.NewService(countriesNowClient)
+	populationService := population.NewService(countriesNowClient, restCountriesClient)
 	statusService := status.NewService(countriesNowClient, restCountriesClient)
 
 	// Initialize services
