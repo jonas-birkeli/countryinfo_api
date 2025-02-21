@@ -40,11 +40,8 @@ type cityRequest struct {
 }
 
 // GetCities retrieves cities for a country
-func (c *Client) GetCities(ctx context.Context, country string, limit int) ([]string, error) {
+func (c *Client) GetCities(ctx context.Context, country string) ([]string, error) {
 	reqBody := cityRequest{
-		Limit:   limit,
-		Order:   "asc",
-		OrderBy: "name",
 		Country: country,
 	}
 	jsonBody, err := json.Marshal(reqBody)

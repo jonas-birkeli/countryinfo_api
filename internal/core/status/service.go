@@ -34,12 +34,12 @@ func (s *service) checkCountriesNowAPI() string {
 		return "Error"
 	}
 	defer resp.Body.Close()
-	return fmt.Sprintf("%d\n", resp.StatusCode)
+	return fmt.Sprintf("%d", resp.StatusCode)
 }
 
 // GetStatus returns status information
 func (s *service) checkRestCountriesAPI() string {
-	resp, err := http.Head(s.restCountriesClient.GetBaseURL() + "/all")
+	resp, err := http.Head(s.restCountriesClient.GetBaseURL() + "/alpha/no")
 	if err != nil {
 		return "Error"
 	}
@@ -49,7 +49,7 @@ func (s *service) checkRestCountriesAPI() string {
 			return
 		}
 	}(resp.Body)
-	return fmt.Sprintf("%d\n", resp.StatusCode)
+	return fmt.Sprintf("%d", resp.StatusCode)
 }
 
 // GetStatus returns status information concurrently

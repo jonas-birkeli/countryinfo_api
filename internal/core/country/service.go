@@ -44,7 +44,7 @@ func (s *service) GetCountryInfo(ctx context.Context, code string, cityLimit str
 	}
 
 	// Get cities from CountriesNow API - use the common name
-	cities, err := s.countriesNowClient.GetCities(ctx, restCountryInfo.Name.Common, limit)
+	cities, err := s.countriesNowClient.GetCities(ctx, restCountryInfo.Name.Common)
 	if err != nil {
 		return nil, err
 	}
