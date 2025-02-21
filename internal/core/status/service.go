@@ -4,6 +4,7 @@ import (
 	"context"
 	"countryinfo/internal/client/countriesnow"
 	"countryinfo/internal/client/restcountries"
+	"fmt"
 	"io"
 	"net/http"
 	"sync"
@@ -33,7 +34,7 @@ func (s *service) checkCountriesNowAPI() string {
 		return "Error"
 	}
 	defer resp.Body.Close()
-	return http.StatusText(resp.StatusCode)
+	return fmt.Sprintf("%d\n", resp.StatusCode)
 }
 
 // GetStatus returns status information
@@ -48,22 +49,23 @@ func (s *service) checkRestCountriesAPI() string {
 			return
 		}
 	}(resp.Body)
-	return http.StatusText(resp.StatusCode)
+	return fmt.Sprintf("%d\n", resp.StatusCode)
 }
 
 // GetStatus returns status information concurrently
-func (s *service) GetStatus(ctx context.Context) (*StatusInfo, error) {
+func (s *service) GetStatus(ctx context.Context) (*InfoStatus, error) {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	var cnStatus string
+	var rcStatus string
+
 	go func() {
 		defer wg.Done()
 		// Check CountriesNow API
 		cnStatus = s.checkCountriesNowAPI()
 	}()
 
-	var rcStatus string
 	go func() {
 		defer wg.Done()
 		// Check RestCountries API
@@ -72,7 +74,7 @@ func (s *service) GetStatus(ctx context.Context) (*StatusInfo, error) {
 
 	wg.Wait()
 
-	return &StatusInfo{
+	return &InfoStatus{
 		CountriesNowAPI:  cnStatus,
 		RestCountriesAPI: rcStatus,
 		Version:          "v1",

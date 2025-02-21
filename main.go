@@ -28,20 +28,17 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Create clients
-	countriesNowClient, err := countriesnow.NewClient(cfg)
-	if err != nil {
-		log.Fatalf("Failed to initialize CountriesNow client: %v\n", err)
-	}
+	countriesNowClient := countriesnow.NewClient(cfg)
 	restCountriesClient := restcountries.NewClient(cfg)
 
-	// Initialize the service
-	country.InitService(countriesNowClient, restCountriesClient)
-
 	// Create services
+	countryService := country.NewService(countriesNowClient, restCountriesClient)
 	populationService := population.NewService(countriesNowClient, restCountriesClient)
 	statusService := status.NewService(countriesNowClient, restCountriesClient)
 
-	// Initialize services
+	// Initialize services (making them global)
+	handlers.InitCountryService(countryService)
+	handlers.InitPopulationService(populationService)
 	handlers.InitStatusService(statusService)
 
 	// Register handlers with config

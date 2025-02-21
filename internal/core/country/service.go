@@ -8,9 +8,6 @@ import (
 	"strconv"
 )
 
-// Service defines methods for country operations
-var defaultService Service
-
 // service implements the Service interface
 type service struct {
 	countriesNowClient  *countriesnow.Client
@@ -25,25 +22,16 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 	}
 }
 
-// InitService initializes the default country service
-func InitService(cnClient *countriesnow.Client, rcClient *restcountries.Client) {
-	defaultService = NewService(cnClient, rcClient)
-}
-
-// GetService returns the default country service
-func GetService() Service {
-	return defaultService
-}
-
 // GetCountryInfo returns information about a country
 func (s *service) GetCountryInfo(ctx context.Context, code string, cityLimit string) (*CountryInfo, error) {
+
 	// Get base country info from REST Countries API
 	restCountryInfo, err := s.restCountriesClient.GetCountryByCode(ctx, code)
 	if err != nil {
 		return nil, err
 	}
 
-	// Parse city limit with default of 10
+	// Parse the city limit with default of 10
 	limit := 10 // Default limit
 	if cityLimit != "" {
 		parsedLimit, err := strconv.Atoi(cityLimit)

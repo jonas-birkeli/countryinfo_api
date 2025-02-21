@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"countryinfo/internal/config"
+	"countryinfo/internal/responses"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -16,35 +17,18 @@ type Client struct {
 	httpClient *http.Client
 }
 
-// countryListResponse is the structure for the response from the countries endpoint
-type countryListResponse struct {
-	Error bool   `json:"error"`
-	Msg   string `json:"msg"`
-	Data  []struct {
-		Iso2    string `json:"iso2"`
-		Country string `json:"country"`
-	} `json:"data"`
-}
-
 // GetBaseURL returns the base URL
 func (c *Client) GetBaseURL() string {
 	return c.baseURL
 }
 
 // NewClient creates a new CountriesNow client
-func NewClient(cfg *config.Config) (*Client, error) {
+func NewClient(cfg *config.Config) *Client {
 	client := &Client{
 		baseURL:    cfg.ExternalAPIs.CountriesNowAPI,
 		httpClient: &http.Client{},
 	}
-	return client, nil
-}
-
-// countriesnowResponse is a generic response structure
-type countriesnowResponse struct {
-	Error bool        `json:"error"`
-	Msg   string      `json:"msg"`
-	Data  interface{} `json:"data"`
+	return client
 }
 
 // cityRequest is the structure for requesting cities
@@ -81,7 +65,7 @@ func (c *Client) GetCities(ctx context.Context, country string, limit int) ([]st
 
 	req.Header.Set("Content-Type", "application/json")
 
-	var response countriesnowResponse
+	var response responses.CountriesNowResponse
 	response.Data = &[]string{}
 
 	if err := c.doRequest(req, &response); err != nil {
@@ -128,7 +112,7 @@ func (c *Client) GetPopulation(ctx context.Context, countryName string) ([]YearV
 
 	req.Header.Set("Content-Type", "application/json")
 
-	var response countriesnowResponse
+	var response responses.CountriesNowResponse
 	response.Data = &populationResponse{}
 
 	if err := c.doRequest(req, &response); err != nil {
@@ -152,7 +136,7 @@ func (c *Client) GetPopulation(ctx context.Context, countryName string) ([]YearV
 }
 
 // doRequest performs the HTTP request and unmarshals the response
-func (c *Client) doRequest(req *http.Request, response *countriesnowResponse) error {
+func (c *Client) doRequest(req *http.Request, response *responses.CountriesNowResponse) error {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("error making request: %w", err)

@@ -4,11 +4,11 @@ import "context"
 
 // Service represents the status service
 type Service interface {
-	GetStatus(ctx context.Context) (*StatusInfo, error)
+	GetStatus(ctx context.Context) (*InfoStatus, error)
 }
 
-// StatusInfo represents status information
-type StatusInfo struct {
+// InfoStatus represents status information
+type InfoStatus struct {
 	CountriesNowAPI  string `json:"countriesnowapi"`
 	RestCountriesAPI string `json:"restcountriesapi"`
 	Version          string `json:"version"`

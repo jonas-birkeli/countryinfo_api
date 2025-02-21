@@ -8,8 +8,17 @@ import (
 	"strings"
 )
 
+// countrySvc is the population service
+var countrySvc country.Service
+
+// InitCountryService initializes the population service
+func InitCountryService(svc country.Service) {
+	countrySvc = svc
+}
+
 // InfoHandler handles requests for country information
 func InfoHandler(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method != http.MethodGet {
 		writeJSONResponse(w, http.StatusMethodNotAllowed, responses.ErrorResponse{
 			Error: "method not allowed",
@@ -38,8 +47,9 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	limit := r.URL.Query().Get("limit")
 
 	// Call service layer
-	info, err := country.GetService().GetCountryInfo(r.Context(), countryCode, limit)
+	info, err := countrySvc.GetCountryInfo(r.Context(), countryCode, limit)
 	if err != nil {
+
 		writeJSONResponse(w, http.StatusInternalServerError, responses.ErrorResponse{
 			Error: "Failed to get country information",
 		})
