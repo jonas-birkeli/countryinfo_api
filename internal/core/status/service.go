@@ -28,20 +28,20 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 }
 
 // GetStatus returns status information
-func (s *service) checkCountriesNowAPI() string {
+func (s *service) checkCountriesNowAPI() int {
 	resp, err := http.Head(s.countriesNowClient.GetBaseURL() + "/countries")
 	if err != nil {
-		return "Error"
+		return -1
 	}
 	defer resp.Body.Close()
-	return fmt.Sprintf("%d", resp.StatusCode)
+	return resp.StatusCode
 }
 
 // GetStatus returns status information
-func (s *service) checkRestCountriesAPI() string {
+func (s *service) checkRestCountriesAPI() int {
 	resp, err := http.Head(s.restCountriesClient.GetBaseURL() + "/alpha/no")
 	if err != nil {
-		return "Error"
+		return -1
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -49,7 +49,7 @@ func (s *service) checkRestCountriesAPI() string {
 			return
 		}
 	}(resp.Body)
-	return fmt.Sprintf("%d", resp.StatusCode)
+	return resp.StatusCode
 }
 
 // GetStatus returns status information concurrently
@@ -57,8 +57,8 @@ func (s *service) GetStatus(ctx context.Context) (*InfoStatus, error) {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	var cnStatus string
-	var rcStatus string
+	var cnStatus int
+	var rcStatus int
 
 	go func() {
 		defer wg.Done()

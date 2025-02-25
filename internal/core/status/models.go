@@ -9,8 +9,8 @@ type Service interface {
 
 // InfoStatus represents status information
 type InfoStatus struct {
-	CountriesNowAPI  string `json:"countriesnowapi"`
-	RestCountriesAPI string `json:"restcountriesapi"`
+	CountriesNowAPI  int    `json:"countriesnowapi"`
+	RestCountriesAPI int    `json:"restcountriesapi"`
 	Version          string `json:"version"`
 	Uptime           int64  `json:"uptime"`
 }
