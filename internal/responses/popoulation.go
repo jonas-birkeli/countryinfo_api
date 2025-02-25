@@ -12,11 +12,9 @@ type PopulationYearValue struct {
 	Value int `json:"value"`
 }
 
-// isResponse is a marker function to differentiate between response types
-func (r PopulationResponse) isResponse() {}
-
 type FieldsName struct {
 	Name struct {
-		Common string `json:"common"`
+		Common   string `json:"common"`
+		Official string `json:"official"`
 	} `json:"name"`
 }

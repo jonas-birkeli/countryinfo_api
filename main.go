@@ -1,4 +1,3 @@
-// main.go
 package main
 
 import (
@@ -8,7 +7,7 @@ import (
 	"countryinfo/internal/client/countriesnow"
 	"countryinfo/internal/client/restcountries"
 	"countryinfo/internal/config"
-	"countryinfo/internal/core/country"
+	"countryinfo/internal/core/info"
 	"countryinfo/internal/core/population"
 	"countryinfo/internal/core/status"
 	"log"
@@ -32,7 +31,7 @@ func main() {
 	restCountriesClient := restcountries.NewClient(cfg)
 
 	// Create services
-	countryService := country.NewService(countriesNowClient, restCountriesClient)
+	countryService := info.NewService(countriesNowClient, restCountriesClient)
 	populationService := population.NewService(countriesNowClient, restCountriesClient)
 	statusService := status.NewService(countriesNowClient, restCountriesClient)
 
@@ -42,7 +41,7 @@ func main() {
 	handlers.InitStatusService(statusService)
 
 	// Register handlers with config
-	handlers.RegisterHandlers(mux, cfg, populationService)
+	handlers.RegisterHandlers(mux, cfg)
 
 	// Apply a middleware chain
 	handler := middleware.Chain(mux,

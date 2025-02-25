@@ -7,6 +7,3 @@ type StatusResponse struct {
 	Version          string `json:"version"`
 	Uptime           int64  `json:"uptime"`
 }
-
-// isResponse is a marker function to differentiate between response types
-func (r StatusResponse) isResponse() {}

@@ -2,23 +2,22 @@ package handlers
 
 import "C"
 import (
-	"countryinfo/internal/core/country"
+	"countryinfo/internal/core/info"
 	"countryinfo/internal/responses"
 	"net/http"
 	"strings"
 )
 
 // countrySvc is the population service
-var countrySvc country.Service
+var countrySvc info.Service
 
 // InitCountryService initializes the population service
-func InitCountryService(svc country.Service) {
+func InitCountryService(svc info.Service) {
 	countrySvc = svc
 }
 
 // InfoHandler handles requests for country information
 func InfoHandler(w http.ResponseWriter, r *http.Request) {
-
 	if r.Method != http.MethodGet {
 		writeJSONResponse(w, http.StatusMethodNotAllowed, responses.ErrorResponse{
 			Error: "method not allowed",

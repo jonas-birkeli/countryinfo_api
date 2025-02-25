@@ -1,4 +1,4 @@
-package country
+package info
 
 import (
 	"context"

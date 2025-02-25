@@ -12,12 +12,9 @@ type CountryInfoResponse struct {
 	Cities     []string          `json:"cities,omitempty"`
 }
 
-// countriesNowResponse is a generic response structure
+// CountriesNowResponse is a generic response structure
 type CountriesNowResponse struct {
 	Error bool        `json:"error"`
 	Msg   string      `json:"msg"`
 	Data  interface{} `json:"data"`
 }
-
-// isResponse represents the response for country information
-func (r CountryInfoResponse) isResponse() {}

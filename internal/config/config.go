@@ -35,6 +35,7 @@ type EndpointConfig struct {
 	Info       string
 	Population string
 	Status     string
+	Root       string
 }
 
 // PathConfig holds configuration values for paths
@@ -54,7 +55,7 @@ type TimeoutConfig struct {
 // NewConfig creates a new configuration with default values
 func NewConfig() *Config {
 	return &Config{
-		Port:        getEnvOrDefault("PORT", "8080"),
+		Port:        getEnvOrDefault("PORT", "8081"),
 		BaseAPI:     "/countryinfo/v1",
 		StartTime:   time.Now(),
 		ContentType: "application/json",
@@ -86,6 +87,7 @@ func (c *Config) Init() {
 		Info:       c.BaseAPI + "/info/",
 		Population: c.BaseAPI + "/population/",
 		Status:     c.BaseAPI + "/status/",
+		Root:       "/",
 	}
 }
 

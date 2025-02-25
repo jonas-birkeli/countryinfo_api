@@ -1,4 +1,4 @@
-package country
+package info
 
 import (
 	"context"
@@ -24,7 +24,6 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 
 // GetCountryInfo returns information about a country
 func (s *service) GetCountryInfo(ctx context.Context, code string, cityLimit string) (*CountryInfo, error) {
-
 	// Get base country info from REST Countries API
 	restCountryInfo, err := s.restCountriesClient.GetCountryByCode(ctx, code)
 	if err != nil {

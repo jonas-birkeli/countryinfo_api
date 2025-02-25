@@ -21,17 +21,21 @@ func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) S
 	}
 }
 
-// GetPopulationData returns population data for a country
+// GetPopulationData returns population data for a country.
+// Attempts with both official and common name.
 func (s *service) GetPopulationData(ctx context.Context, code string, timeRange *TimeRange) (*PopulationData, error) {
-	countryName, err := s.restCountriesClient.TranslateCountryCode(ctx, code)
+	commonName, officialName, err := s.restCountriesClient.TranslateCountryCode(ctx, code)
 	if err != nil {
 		return nil, err
 	}
 
 	// Get population data from CountriesNow API
-	data, err := s.countriesNowClient.GetPopulation(ctx, countryName)
+	data, err := s.countriesNowClient.GetPopulation(ctx, commonName)
 	if err != nil {
-		return nil, err
+		data, err = s.countriesNowClient.GetPopulation(ctx, officialName)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	// Filter by time range if provided

@@ -4,6 +4,3 @@ package responses
 type ErrorResponse struct {
 	Error string `json:"error"`
 }
-
-// isResponse represents the response for errors
-func (r ErrorResponse) isResponse() {}

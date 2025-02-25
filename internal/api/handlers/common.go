@@ -10,7 +10,11 @@ import (
 func writeJSONResponse(w http.ResponseWriter, code int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(data)
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		// Something very bad happened, and it's not my fault. Ignoring
+		return
+	}
 }
 
 // validateCountryCode validates the two-letter country code
@@ -19,6 +23,7 @@ func validateCountryCode(code string) bool {
 		return false
 	}
 
+	// All characters must be valid characters
 	for _, char := range code {
 		if !unicode.IsLetter(char) {
 			return false
