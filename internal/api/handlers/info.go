@@ -48,9 +48,8 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 	// Call service layer
 	info, err := countrySvc.GetCountryInfo(r.Context(), countryCode, limit)
 	if err != nil {
-
 		writeJSONResponse(w, http.StatusInternalServerError, responses.ErrorResponse{
-			Error: "Failed to get country information",
+			Error: err.Error(),
 		})
 		return
 	}

@@ -4,7 +4,6 @@ import (
 	"context"
 	"countryinfo/internal/client/countriesnow"
 	"countryinfo/internal/client/restcountries"
-	"fmt"
 	"io"
 	"net/http"
 	"sync"
@@ -78,6 +77,6 @@ func (s *service) GetStatus(ctx context.Context) (*InfoStatus, error) {
 		CountriesNowAPI:  cnStatus,
 		RestCountriesAPI: rcStatus,
 		Version:          "v1",
-		Uptime:           int64(time.Since(s.startTime).Seconds()),
+		Uptime:           int(time.Since(s.startTime).Seconds()),
 	}, nil
 }
