@@ -55,7 +55,7 @@ type TimeoutConfig struct {
 // NewConfig creates a new configuration with default values
 func NewConfig() *Config {
 	return &Config{
-		Port:        getEnvOrDefault("PORT", "8081"),
+		Port:        getEnvOrDefault("PORT", "8080"),
 		BaseAPI:     "/countryinfo/v1",
 		StartTime:   time.Now(),
 		ContentType: "application/json",
