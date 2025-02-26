@@ -132,21 +132,22 @@ func (c *Client) GetPopulation(ctx context.Context, countryName string) ([]YearV
 	return yearValues, nil
 }
 
-// doRequest performs the HTTP request and unmarshals the response
+// doRequest performs the HTTP request and unmarshal the response
 func (c *Client) doRequest(req *http.Request, response *responses.CountriesNowResponse) error {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("error making request: %w", err)
 	}
+
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
 			return
 		}
 	}(resp.Body)
-
 	if err := json.NewDecoder(resp.Body).Decode(response); err != nil {
-		return fmt.Errorf("error decoding response: %w", err)
+		//log.Printf("error decoding response: %v", err)
+		return fmt.Errorf("could not fetch correct data")
 	}
 
 	if response.Error {

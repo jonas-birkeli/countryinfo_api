@@ -136,7 +136,7 @@ This service integrates with two external APIs:
 1. CountriesNow API (http://129.241.150.113:3500/api/v0.1/)
 2. REST Countries API (http://129.241.150.113:8080/v3.1/)
 
-The service processes and transforms data from these sources to provide a unified interface for country information.
+The service processes and transform data from these sources to provide a unified interface for country information.
 
 ## Deployment
 
@@ -147,6 +147,7 @@ The service is deployed on Render at: [https://countryinfo-api.onrender.com](htt
 - Error handling follows REST best practices
 - Requests to third-party APIs are made as small as possible
 - The service uses only Go standard library to minimize dependencies
+- Manages inconsistencies with countries going under different naming schemes and not being present in different APIs.
 
 ## License
 
