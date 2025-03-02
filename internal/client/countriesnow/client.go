@@ -147,7 +147,7 @@ func (c *Client) doRequest(req *http.Request, response *responses.CountriesNowRe
 	}(resp.Body)
 	if err := json.NewDecoder(resp.Body).Decode(response); err != nil {
 		//log.Printf("error decoding response: %v", err)
-		return fmt.Errorf("could not fetch correct data")
+		return fmt.Errorf("could not fetch complete data")
 	}
 
 	if response.Error {

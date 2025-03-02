@@ -13,7 +13,7 @@ type service struct {
 	restCountriesClient *restcountries.Client
 }
 
-// Service interface defines methods for population operations
+// NewService Service interface defines methods for population operations
 func NewService(cnClient *countriesnow.Client, rcClient *restcountries.Client) Service {
 	return &service{
 		countriesNowClient:  cnClient,

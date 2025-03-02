@@ -75,7 +75,7 @@ func (c *Client) GetCountryByCode(ctx context.Context, code string) (*CountryInf
 	var countries []CountryInfo
 	if err := json.NewDecoder(resp.Body).Decode(&countries); err != nil {
 		//log.Printf("error decoding response: %w", err)
-		return nil, fmt.Errorf("could not fetch correct data")
+		return nil, fmt.Errorf("could not fetch complete data")
 	}
 
 	// Return error if no countries found
@@ -113,7 +113,7 @@ func (c *Client) TranslateCountryCode(ctx context.Context, code string) (string,
 	var fieldName responses.FieldsName
 	if err := json.NewDecoder(resp.Body).Decode(&fieldName); err != nil {
 		//log.Printf("error decoding response HEIHEI: %v", err)
-		return "", "", fmt.Errorf("could not fetch correct data")
+		return "", "", fmt.Errorf("could not fetch complete data")
 	}
 
 	return fieldName.Name.Common, fieldName.Name.Official, nil

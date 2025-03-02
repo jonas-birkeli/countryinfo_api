@@ -1,6 +1,5 @@
 package handlers
 
-import "C"
 import (
 	"countryinfo/internal/core/info"
 	"countryinfo/internal/responses"
